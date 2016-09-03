@@ -26,6 +26,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
             'MerKey'  => 'c71530d016b3475579da8af971f7ca6c',
             'MerName' => null,
             'Account' => 'b02e072eee68d65bff916e08b4f11df2',
+            'sandbox' => false,
         ];
 
         $params = [
@@ -83,6 +84,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
             'MerKey'  => 'c71530d016b3475579da8af971f7ca6c',
             'MerName' => null,
             'Account' => 'b02e072eee68d65bff916e08b4f11df2',
+            'sandbox' => false,
         ];
 
         $params = [
@@ -99,6 +101,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         */
 
         $api = new Api($options, $httpClient, $message);
+
         /*
         |------------------------------------------------------------
         | Assertion
@@ -148,6 +151,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
             'MerKey'  => 'c71530d016b3475579da8af971f7ca6c',
             'MerName' => null,
             'Account' => 'b02e072eee68d65bff916e08b4f11df2',
+            'sandbox' => false,
         ];
 
         $params = [
@@ -164,6 +168,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         */
 
         $api = new Api($options, $httpClient, $message);
+
         /*
         |------------------------------------------------------------
         | Assertion
@@ -172,5 +177,44 @@ class ApiTest extends PHPUnit_Framework_TestCase
 
         $params = $api->parseResult($params);
         $this->assertSame('-1', $params['RspCode']);
+    }
+
+    public function test_generate_testing_data()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+
+        $options = [
+            'Version' => 'v1.0.0',
+            'MerCode' => 'c5374addd1a3d024c3a026199cb8feaf',
+            'MerKey'  => 'c71530d016b3475579da8af971f7ca6c',
+            'MerName' => null,
+            'Account' => 'b02e072eee68d65bff916e08b4f11df2',
+            'sandbox' => true,
+        ];
+
+        $httpClient = m::mock(HttpClientInterface::class);
+        $message = m::mock(MessageFactory::class);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $api = new Api($options, $httpClient, $message);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+
+        $this->assertTrue($api->isTesting());
+        $params = $api->parseResult($api->generateTestingResponse());
+        $this->assertSame('000000', $params['RspCode']);
     }
 }

@@ -59,6 +59,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('createNotifyToken')->once()->andReturn($notifyToken);
 
         $api
+            ->shouldReceive('isTesting')->once()->andReturn(false)
             ->shouldReceive('getApiEndpoint')->once()->andReturn('foo')
             ->shouldReceive('preparePayment')->once()->andReturn($model->toUnsafeArray());
 
@@ -108,6 +109,61 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         $expected = [
             'paymentResult' => ['foo' => 'bar'],
         ];
+
+        $api->shouldReceive('isTesting')->once()->andReturn(false);
+
+        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {
+            $httpRequest->request = $expected;
+
+            $api->shouldReceive('parseResult')->once()->andReturn($httpRequest->request);
+        });
+
+        $request
+            ->shouldReceive('getModel')->twice()->andReturn($model);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+
+        $action->setGateway($gateway);
+        $action->setApi($api);
+        $action->setGenericTokenFactory($tokenFactory);
+        $action->execute($request);
+        $this->assertSame($expected, $model->toUnsafeArray());
+    }
+
+    public function test_ips_testing_response()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+
+        $action = new CaptureAction();
+        $gateway = m::mock(GatewayInterface::class);
+        $request = m::mock(Capture::class);
+        $tokenFactory = m::mock(GenericTokenFactoryInterface::class);
+        $token = m::mock(stdClass::class);
+        $notifyToken = m::mock(stdClass::class);
+        $api = m::mock(Api::class);
+        $model = new ArrayObject([]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $expected = [
+            'paymentResult' => ['foo' => 'bar'],
+        ];
+
+        $api
+            ->shouldReceive('isTesting')->once()->andReturn(true)
+            ->shouldReceive('generateTestingResponse')->once()->andReturn($expected);
 
         $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {
             $httpRequest->request = $expected;

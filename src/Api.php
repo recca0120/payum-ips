@@ -132,8 +132,6 @@ class Api
             array_intersect_key($params, $supportedParams)
         ));
 
-        $params['Signature'] = $this->calculateHash($params);
-
         return [
             'pGateWayReq' => $this->generatGetwayRequest($params),
         ];
@@ -141,6 +139,7 @@ class Api
 
     protected function generatGetwayRequest($params)
     {
+        $params['Signature'] = $this->calculateHash($params);
         $params = $this->split($this->addCdata($params));
 
         return $this->convertToXML([
@@ -264,5 +263,41 @@ class Api
         }
 
         return $result;
+    }
+
+    public function isTesting()
+    {
+        return $this->options['sandbox'];
+    }
+
+    public function generateTestingResponse($params = [])
+    {
+        $supportedParams = [
+            'ReferenceID'   => '',
+            'RspCode'       => '000000',
+            'RspMsg'        => '交易成功！',
+            'ReqDate'       => date('YmdHis'),
+            'RspDate'       => date('YmdHis'),
+            'CurrencyType'  => 156,
+            'Amount'        => null,
+            'Date'          => date('Ymd'),
+            'Status'        => 'Y',
+            'Msg'           => '支付成功！',
+            'IpsBillNo'     => date('YmdHis'),
+            'IpsTradeNo'    => date('YmdHis'),
+            'RetEncodeType' => 17,
+            'BankBillNo'    => '710002875951',
+            'ResultType'    => 0,
+            'IpsBillTime'   => date('YmdHis'),
+        ];
+
+        $params = array_filter(array_replace(
+            $supportedParams,
+            array_intersect_key($params, $supportedParams)
+        ));
+
+        return [
+            'paymentResult' => $this->generatGetwayRequest($params),
+        ];
     }
 }
