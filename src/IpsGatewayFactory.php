@@ -32,6 +32,7 @@ class IpsGatewayFactory extends GatewayFactory
                 'MerKey'  => null,
                 'MerName' => null,
                 'Account' => null,
+                'sandbox' => true,
             ];
 
             $config->defaults($config['payum.default_options']);

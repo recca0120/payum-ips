@@ -1,6 +1,7 @@
 <?php
 
 use Mockery as m;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetStatusInterface;
 use PayumTW\Ips\Action\StatusAction;
 
@@ -11,7 +12,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function test_execute()
+    public function test_request_mark_new()
     {
         /*
         |------------------------------------------------------------
@@ -21,7 +22,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
 
         $action = new StatusAction();
         $request = m::mock(GetStatusInterface::class);
-        $model = m::mock(ArrayAccess::class.','.Traversable::class);
+        $model = new ArrayObject();
 
         /*
         |------------------------------------------------------------
@@ -29,7 +30,9 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        // $request->shouldReceive('getModel')->once()->andReturn($model);
+        $request
+            ->shouldReceive('getModel')->andReturn($model)->twice()
+            ->shouldReceive('markNew')->once();
 
         /*
         |------------------------------------------------------------
@@ -37,6 +40,74 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        // $action->execute($request);
+        $action->execute($request);
+    }
+
+    public function test_request_mark_captured()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+
+        $action = new StatusAction();
+        $request = m::mock(GetStatusInterface::class);
+        $model = new ArrayObject([
+            'paymentResult' => 'foo',
+            'RspCode'       => '000000',
+        ]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $request
+            ->shouldReceive('getModel')->andReturn($model)->twice()
+            ->shouldReceive('markCaptured')->once();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+
+        $action->execute($request);
+    }
+
+    public function test_request_mark_failed()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+
+        $action = new StatusAction();
+        $request = m::mock(GetStatusInterface::class);
+        $model = new ArrayObject([
+            'paymentResult' => 'foo',
+            'RspCode'       => '-1',
+        ]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $request
+            ->shouldReceive('getModel')->andReturn($model)->twice()
+            ->shouldReceive('markFailed')->once();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+
+        $action->execute($request);
     }
 }

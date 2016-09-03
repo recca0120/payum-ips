@@ -46,7 +46,7 @@ class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
 
         $model->replace($params);
 
-        throw new HttpResponse(true, 200, ['Content-Type' => 'text/plain']);
+        throw new HttpResponse('1', 200, ['Content-Type' => 'text/plain']);
     }
 
     /**
