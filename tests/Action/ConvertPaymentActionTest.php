@@ -13,7 +13,7 @@ class ConvertPaymentActionTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function test_request_mark_new()
+    public function test_convert()
     {
         /*
         |------------------------------------------------------------
@@ -38,8 +38,8 @@ class ConvertPaymentActionTest extends PHPUnit_Framework_TestCase
 
         $payment
             ->shouldReceive('getDetails')->andReturn([])
-            ->shouldReceive('getNumber')->andReturn('foo')
-            ->shouldReceive('getTotalAmount')->andReturn('bar');
+            ->shouldReceive('getNumber')->andReturn('fooMerBillNo')
+            ->shouldReceive('getTotalAmount')->andReturn('fooAmount');
 
         /*
         |------------------------------------------------------------
@@ -49,8 +49,8 @@ class ConvertPaymentActionTest extends PHPUnit_Framework_TestCase
 
         $request->shouldReceive('setResult')->once()->andReturnUsing(function ($data) {
             $this->assertSame([
-                'MerBillNo' => 'foo',
-                'Amount'    => 'bar',
+                'MerBillNo' => 'fooMerBillNo',
+                'Amount'    => 'fooAmount',
             ], $data);
         });
 
