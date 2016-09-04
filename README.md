@@ -1,15 +1,15 @@
-# Esunbank
+# Ips
 
 The Payum extension to rapidly build new extensions.
 
 1. Create new project
 
 ```bash
-$ composer create-project payum-tw/allpay
+$ composer create-project payum-tw/ips
 ```
 
 2. Replace all occurrences of `payum` with your vendor name. It may be your github name, for now let's say you choose: `acme`.
-3. Replace all occurrences of `allpay` with a payment gateway name. For example Stripe, Paypal etc. For now let's say you choose: `allpay`.
+3. Replace all occurrences of `ips` with a payment gateway name. For example Stripe, Paypal etc. For now let's say you choose: `ips`.
 4. Register a gateway factory to the payum's builder and create a gateway:
 
 ```php
@@ -21,16 +21,17 @@ use Payum\Core\GatewayFactoryInterface;
 $defaultConfig = [];
 
 $payum = (new PayumBuilder)
-    ->addGatewayFactory('allpay', function(array $config, GatewayFactoryInterface $coreGatewayFactory) {
+    ->addGatewayFactory('ips', function(array $config, GatewayFactoryInterface $coreGatewayFactory) {
         return new \PayumTW\Allpay\AllpayGatewayFactory($config, $coreGatewayFactory);
     })
 
-    ->addGateway('allpay', [
-        'factory'     => 'allpay',
-        'MerchantID'  => '2000132',
-        'HashKey'     => '5294y06JbISpM5x9',
-        'HashIV'      => 'v77hoKGq4kWxNNIS',
-        'sandbox'     => true,
+    ->addGateway('ips', [
+        'factory' => 'ips',
+        'MerCode' => null,
+        'MerKey'  => null,
+        'MerName' => null,
+        'Account' => null,
+        'sandbox' => true,
     ])
 
     ->getPayum()
@@ -44,13 +45,13 @@ $payum = (new PayumBuilder)
 
 use Payum\Core\Request\Capture;
 
-$allpay = $payum->getGateway('allpay');
+$ips = $payum->getGateway('ips');
 
 $model = new \ArrayObject([
   // ...
 ]);
 
-$allpay->execute(new Capture($model));
+$ips->execute(new Capture($model));
 ```
 
 ## Resources

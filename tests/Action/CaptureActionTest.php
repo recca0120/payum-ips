@@ -48,7 +48,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
 
         $token
             ->shouldReceive('getTargetUrl')->andReturn('fooMerchanturl')
-            ->shouldReceive('getGatewayName')->andReturn('foo')
+            ->shouldReceive('getGatewayName')->andReturn('fooGatewayName')
             ->shouldReceive('getDetails')->andReturn([
                 'foo' => 'bar',
             ]);
@@ -60,7 +60,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
 
         $api
             ->shouldReceive('isTesting')->once()->andReturn(false)
-            ->shouldReceive('getApiEndpoint')->once()->andReturn('foo')
+            ->shouldReceive('getApiEndpoint')->once()->andReturn('fooApiEndpoint')
             ->shouldReceive('preparePayment')->once()->andReturn($model->toUnsafeArray());
 
         /*
