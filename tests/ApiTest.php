@@ -213,7 +213,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $this->assertTrue($api->isTesting());
+        $this->assertTrue($api->isSandbox());
         $params = $api->parseResult($api->generateTestingResponse());
         $this->assertSame('000000', $params['RspCode']);
     }

@@ -59,7 +59,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('createNotifyToken')->once()->andReturn($notifyToken);
 
         $api
-            ->shouldReceive('isTesting')->once()->andReturn(false)
+            ->shouldReceive('isSandbox')->once()->andReturn(false)
             ->shouldReceive('getApiEndpoint')->once()->andReturn('fooApiEndpoint')
             ->shouldReceive('preparePayment')->once()->andReturn($model->toUnsafeArray());
 
@@ -110,7 +110,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
             'paymentResult' => ['foo' => 'bar'],
         ];
 
-        $api->shouldReceive('isTesting')->once()->andReturn(false);
+        $api->shouldReceive('isSandbox')->once()->andReturn(false);
 
         $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {
             $httpRequest->request = $expected;
@@ -162,7 +162,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         ];
 
         $api
-            ->shouldReceive('isTesting')->once()->andReturn(true)
+            ->shouldReceive('isSandbox')->once()->andReturn(true)
             ->shouldReceive('generateTestingResponse')->once()->andReturn($expected);
 
         $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {

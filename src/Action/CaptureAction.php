@@ -54,7 +54,7 @@ class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAw
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
-        if ($this->api->isTesting() === true) {
+        if ($this->api->isSandbox() === true) {
             $httpRequest->request = $this->api->generateTestingResponse($model->toUnsafeArray());
         }
 

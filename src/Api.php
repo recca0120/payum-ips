@@ -87,22 +87,22 @@ class Api
     public function preparePayment(array $params)
     {
         $supportedParams = [
-            'Version'         => $this->options['Version'],
-            'MerCode'         => $this->options['MerCode'],
-            'MerName'         => $this->options['MerName'],
-            'Account'         => $this->options['Account'],
-            'MsgId'           => null,
-            'ReqDate'         => date('YmdHis'),
+            'Version' => $this->options['Version'],
+            'MerCode' => $this->options['MerCode'],
+            'MerName' => $this->options['MerName'],
+            'Account' => $this->options['Account'],
+            'MsgId'   => null,
+            'ReqDate' => date('YmdHis'),
 
-            'MerBillNo'       => null,
-            'GatewayType'     => '01',
-            'Date'            => date('Ymd'),
-            'CurrencyType'    => 156,
-            'Amount'          => 0,
-            'Lang'            => 'GB',
-            'Merchanturl'     => null,
-            'FailUrl'         => null,
-            'Attach'          => null,
+            'MerBillNo'    => null,
+            'GatewayType'  => '01',
+            'Date'         => date('Ymd'),
+            'CurrencyType' => 156,
+            'Amount'       => 0,
+            'Lang'         => 'GB',
+            'Merchanturl'  => null,
+            'FailUrl'      => null,
+            'Attach'       => null,
             /*
              * 说明：存放商户所选择订单支 付接口加密方式。
              * 5#订单支付采用 Md5 的摘要 讣证方式
@@ -113,18 +113,18 @@ class Api
              *16#Md5WithRsa 数字签 名方式
              *17#Md5数字签名方式
              */
-            'RetEncodeType'   => 17,
+            'RetEncodeType' => 17,
             /*
              * Server to Server 返回。
              * 1#S2S返回
              */
-            'RetType'         => 1,
-            'ServerUrl'       => null,
-            'BillEXP'         => null,
-            'GoodsName'       => null,
-            'IsCredit'        => null,
-            'BankCode'        => null,
-            'ProductType'     => null,
+            'RetType'     => 1,
+            'ServerUrl'   => null,
+            'BillEXP'     => null,
+            'GoodsName'   => null,
+            'IsCredit'    => null,
+            'BankCode'    => null,
+            'ProductType' => null,
         ];
 
         $params = array_filter(array_replace(
@@ -137,6 +137,15 @@ class Api
         ];
     }
 
+    /**
+     * generatGetwayRequest.
+     *
+     * @method generatGetwayRequest
+     *
+     * @param array $params
+     *
+     * @return string
+     */
     protected function generatGetwayRequest($params)
     {
         $params['Signature'] = $this->calculateHash($params);
@@ -149,6 +158,15 @@ class Api
         ]);
     }
 
+    /**
+     * convertToXML.
+     *
+     * @method convertToXML
+     *
+     * @param array $params
+     *
+     * @return string
+     */
     protected function convertToXML($params)
     {
         $xml = '';
@@ -163,6 +181,15 @@ class Api
         return $xml;
     }
 
+    /**
+     * split.
+     *
+     * @method split
+     *
+     * @param array $params
+     *
+     * @return array
+     */
     protected function split($params)
     {
         $head = [];
@@ -179,6 +206,15 @@ class Api
         return compact('head', 'body');
     }
 
+    /**
+     * addCdata.
+     *
+     * @method addCdata
+     *
+     * @param array $params
+     *
+     * @return array
+     */
     protected function addCdata($params)
     {
         foreach ($this->cdata as $cdata) {
@@ -241,16 +277,34 @@ class Api
         return $params;
     }
 
+    /**
+     * parseResultTags.
+     *
+     * @method parseResultTags
+     *
+     * @param string $paymentResult
+     *
+     * @return array
+     */
     protected function parseResultTags($paymentResult)
     {
         $result = [];
         if (preg_match_all('/<([^\/]+?)>/', $paymentResult, $tags)) {
             $result = array_diff($tags[1], ['Ips', 'GateWayRsp', 'head', 'body']);
-        };
+        }
 
         return $result;
     }
 
+    /**
+     * parsePaymentResult.
+     *
+     * @method parsePaymentResult
+     *
+     * @param string $paymentResult
+     *
+     * @return array
+     */
     protected function parsePaymentResult($paymentResult)
     {
         $result = [];
@@ -265,11 +319,27 @@ class Api
         return $result;
     }
 
-    public function isTesting()
+    /**
+     * isSandbox.
+     *
+     * @method isSandbox
+     *
+     * @return bool
+     */
+    public function isSandbox()
     {
         return $this->options['sandbox'];
     }
 
+    /**
+     * generateTestingResponse.
+     *
+     * @method generateTestingResponse
+     *
+     * @param array $params
+     *
+     * @return array
+     */
     public function generateTestingResponse($params = [])
     {
         $supportedParams = [
