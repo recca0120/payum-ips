@@ -50,7 +50,7 @@ class ConvertPaymentActionTest extends PHPUnit_Framework_TestCase
         $request->shouldReceive('setResult')->once()->andReturnUsing(function ($data) {
             $this->assertSame([
                 'MerBillNo' => 'fooMerBillNo',
-                'Amount'    => 'fooAmount',
+                'Amount' => 'fooAmount',
             ], $data);
         });
 

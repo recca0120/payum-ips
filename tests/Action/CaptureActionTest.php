@@ -77,8 +77,8 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         } catch (HttpResponse $response) {
             $this->assertSame([
                 'Merchanturl' => 'fooMerchanturl',
-                'FailUrl'     => 'fooMerchanturl',
-                'ServerUrl'   => 'fooServerUrl',
+                'FailUrl' => 'fooMerchanturl',
+                'ServerUrl' => 'fooServerUrl',
             ], $model->toUnsafeArray());
         }
     }

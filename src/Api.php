@@ -91,18 +91,18 @@ class Api
             'MerCode' => $this->options['MerCode'],
             'MerName' => $this->options['MerName'],
             'Account' => $this->options['Account'],
-            'MsgId'   => null,
+            'MsgId' => null,
             'ReqDate' => date('YmdHis'),
 
-            'MerBillNo'    => null,
-            'GatewayType'  => '01',
-            'Date'         => date('Ymd'),
+            'MerBillNo' => null,
+            'GatewayType' => '01',
+            'Date' => date('Ymd'),
             'CurrencyType' => 156,
-            'Amount'       => 0,
-            'Lang'         => 'GB',
-            'Merchanturl'  => null,
-            'FailUrl'      => null,
-            'Attach'       => null,
+            'Amount' => 0,
+            'Lang' => 'GB',
+            'Merchanturl' => null,
+            'FailUrl' => null,
+            'Attach' => null,
             /*
              * 说明：存放商户所选择订单支 付接口加密方式。
              * 5#订单支付采用 Md5 的摘要 讣证方式
@@ -118,12 +118,12 @@ class Api
              * Server to Server 返回。
              * 1#S2S返回
              */
-            'RetType'     => 1,
-            'ServerUrl'   => null,
-            'BillEXP'     => null,
-            'GoodsName'   => null,
-            'IsCredit'    => null,
-            'BankCode'    => null,
+            'RetType' => 1,
+            'ServerUrl' => null,
+            'BillEXP' => null,
+            'GoodsName' => null,
+            'IsCredit' => null,
+            'BankCode' => null,
             'ProductType' => null,
         ];
 
@@ -343,22 +343,22 @@ class Api
     public function generateTestingResponse($params = [])
     {
         $supportedParams = [
-            'ReferenceID'   => '',
-            'RspCode'       => '000000',
-            'RspMsg'        => '交易成功！',
-            'ReqDate'       => date('YmdHis'),
-            'RspDate'       => date('YmdHis'),
-            'CurrencyType'  => 156,
-            'Amount'        => null,
-            'Date'          => date('Ymd'),
-            'Status'        => 'Y',
-            'Msg'           => '支付成功！',
-            'IpsBillNo'     => date('YmdHis'),
-            'IpsTradeNo'    => date('YmdHis'),
+            'ReferenceID' => '',
+            'RspCode' => '000000',
+            'RspMsg' => '交易成功！',
+            'ReqDate' => date('YmdHis'),
+            'RspDate' => date('YmdHis'),
+            'CurrencyType' => 156,
+            'Amount' => null,
+            'Date' => date('Ymd'),
+            'Status' => 'Y',
+            'Msg' => '支付成功！',
+            'IpsBillNo' => date('YmdHis'),
+            'IpsTradeNo' => date('YmdHis'),
             'RetEncodeType' => 17,
-            'BankBillNo'    => '710002875951',
-            'ResultType'    => 0,
-            'IpsBillTime'   => date('YmdHis'),
+            'BankBillNo' => '710002875951',
+            'ResultType' => 0,
+            'IpsBillTime' => date('YmdHis'),
         ];
 
         $params = array_filter(array_replace(

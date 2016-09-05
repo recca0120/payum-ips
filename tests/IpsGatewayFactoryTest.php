@@ -39,12 +39,12 @@ class IpsGatewayFactoryTest extends PHPUnit_Framework_TestCase
 
         $gateway = new IpsGatewayFactory();
         $config = $gateway->createConfig([
-            'payum.api'               => false,
-            'MerCode'                 => md5(rand()),
-            'MerKey'                  => md5(rand()),
-            'Account'                 => md5(rand()),
-            'payum.required_options'  => [],
-            'payum.http_client'       => $httpClient,
+            'payum.api' => false,
+            'MerCode' => md5(rand()),
+            'MerKey' => md5(rand()),
+            'Account' => md5(rand()),
+            'payum.required_options' => [],
+            'payum.http_client' => $httpClient,
             'httplug.message_factory' => $message,
         ]);
 

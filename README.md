@@ -1,5 +1,14 @@
 # Ips
 
+[![StyleCI](https://styleci.io/repos/67210412/shield?style=flat)](https://styleci.io/repos/67210412)
+[![Build Status](https://travis-ci.org/recca0120/payum-ips.svg)](https://travis-ci.org/recca0120/payum-ips)
+[![Total Downloads](https://poser.pugx.org/payum-tw/ips/d/total.svg)](https://packagist.org/packages/payum-tw/ips)
+[![Latest Stable Version](https://poser.pugx.org/payum-tw/ips/v/stable.svg)](https://packagist.org/packages/payum-tw/ips)
+[![Latest Unstable Version](https://poser.pugx.org/payum-tw/ips/v/unstable.svg)](https://packagist.org/packages/payum-tw/ips)
+[![License](https://poser.pugx.org/payum-tw/ips/license.svg)](https://packagist.org/packages/payum-tw/ips)
+[![Monthly Downloads](https://poser.pugx.org/payum-tw/ips/d/monthly)](https://packagist.org/packages/payum-tw/ips)
+[![Daily Downloads](https://poser.pugx.org/payum-tw/ips/d/daily)](https://packagist.org/packages/payum-tw/ips)
+
 The Payum extension to rapidly build new extensions.
 
 1. Create new project

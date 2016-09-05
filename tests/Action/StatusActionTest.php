@@ -55,7 +55,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         $request = m::mock(GetStatusInterface::class);
         $model = new ArrayObject([
             'paymentResult' => 'foo',
-            'RspCode'       => '000000',
+            'RspCode' => '000000',
         ]);
 
         /*
@@ -89,7 +89,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         $request = m::mock(GetStatusInterface::class);
         $model = new ArrayObject([
             'paymentResult' => 'foo',
-            'RspCode'       => '-1',
+            'RspCode' => '-1',
         ]);
 
         /*
