@@ -43,17 +43,17 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
         if ($this->api->isSandbox() === true) {
-            $httpRequest->request = $this->api->generateTestingResponse($model->toUnsafeArray());
+            $httpRequest->request = $this->api->generateTestingResponse($details->toUnsafeArray());
         }
 
         if (isset($httpRequest->request['paymentResult']) === true) {
-            $model->replace($this->api->parseResult($httpRequest->request));
+            $details->replace($this->api->parseResult($httpRequest->request));
 
             return;
         }
@@ -61,26 +61,26 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $token = $request->getToken();
         $targetUrl = $token->getTargetUrl();
 
-        if (empty($model['Merchanturl']) === true) {
-            $model['Merchanturl'] = $targetUrl;
+        if (empty($details['Merchanturl']) === true) {
+            $details['Merchanturl'] = $targetUrl;
         }
 
-        if (empty($model['FailUrl']) === true) {
-            $model['FailUrl'] = $targetUrl;
+        if (empty($details['FailUrl']) === true) {
+            $details['FailUrl'] = $targetUrl;
         }
 
-        if (empty($model['ServerUrl']) === true) {
+        if (empty($details['ServerUrl']) === true) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
                 $token->getGatewayName(),
                 $token->getDetails()
             );
 
-            $model['ServerUrl'] = $notifyToken->getTargetUrl();
+            $details['ServerUrl'] = $notifyToken->getTargetUrl();
         }
 
         throw new HttpPostRedirect(
             $this->api->getApiEndpoint(),
-            $this->api->preparePayment($model->toUnsafeArray())
+            $this->api->preparePayment($details->toUnsafeArray())
         );
     }
 

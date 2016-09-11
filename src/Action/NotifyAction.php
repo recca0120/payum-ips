@@ -32,7 +32,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
@@ -43,11 +43,11 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
             throw new HttpResponse('Signature verify fail.', 400, ['Content-Type' => 'text/plain']);
         }
 
-        if ($model['MerBillNo'] !== $params['MerBillNo']) {
+        if ($details['MerBillNo'] !== $params['MerBillNo']) {
             throw new HttpResponse('MerBillNo fail.', 400, ['Content-Type' => 'text/plain']);
         }
 
-        $model->replace($params);
+        $details->replace($params);
 
         throw new HttpResponse('1', 200, ['Content-Type' => 'text/plain']);
     }
