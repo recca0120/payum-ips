@@ -20,9 +20,9 @@ class IpsGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'ips',
             'payum.factory_title' => 'Ips',
             'payum.action.capture' => new CaptureAction(),
+            'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
-            'payum.action.notify' => new NotifyAction(),
         ]);
 
         if (false == $config['payum.api']) {
