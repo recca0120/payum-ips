@@ -2,9 +2,9 @@
 
 namespace PayumTW\Ips\Action\Api;
 
-use PayumTW\Ips\Request\Api\GetTransactionData;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use PayumTW\Ips\Request\Api\GetTransactionData;
 
 class GetTransactionDataAction extends BaseApiAwareAction
 {

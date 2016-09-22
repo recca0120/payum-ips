@@ -28,7 +28,7 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         $gateway = m::mock(GatewayInterface::class);
         $request = m::mock(Notify::class);
         $details = new ArrayObject([
-            'MerBillNo' => 'foo',
+            'RspCode' => '000000',
         ]);
 
         /*
@@ -70,7 +70,6 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         $gateway = m::mock(GatewayInterface::class);
         $request = m::mock(Notify::class);
         $details = new ArrayObject([
-            'MerBillNo' => 'foo',
             'RspCode' => '-1',
         ]);
 

@@ -1,11 +1,11 @@
 <?php
 
 use Mockery as m;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Reply\HttpResponse;
 use PayumTW\Ips\Action\Api\CreateTransactionAction;
 use PayumTW\Ips\Api;
-use Payum\Core\Bridge\Spl\ArrayObject;
 use PayumTW\Ips\Request\Api\CreateTransaction;
-use Payum\Core\Reply\HttpResponse;
 
 class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
 {
@@ -58,7 +58,7 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
             ], $response->getFields());
         }
     }
-	
+
 	public function test_sandbox()
     {
         /*
@@ -80,7 +80,7 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
         $request->shouldReceive('getModel')->twice()->andReturn($details);
 
 		$details['Merchanturl'] = 'fooApiEndpoint';
-		
+
         $api
             ->shouldReceive('isSandbox')->once()->andReturn(true)
             ->shouldReceive('generateTestingResponse')->once()->andReturn([
