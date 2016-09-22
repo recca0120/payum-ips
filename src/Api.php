@@ -240,6 +240,8 @@ class Api
         $params = $this->split($params);
         $body = $this->addCdata($params['body']);
 
+        dump($params, $body);
+
         return hash('md5', $this->convertToXML(['body' => $body]).$this->options['MerCode'].$this->options['MerKey']);
     }
 
