@@ -58,4 +58,50 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
             ], $response->getFields());
         }
     }
+	
+	public function test_sandbox()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+
+        $api = m::mock(Api::class);
+        $request = m::mock(CreateTransaction::class);
+        $details = new ArrayObject();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $request->shouldReceive('getModel')->twice()->andReturn($details);
+
+		$details['Merchanturl'] = 'fooApiEndpoint';
+		
+        $api
+            ->shouldReceive('isSandbox')->once()->andReturn(true)
+            ->shouldReceive('generateTestingResponse')->once()->andReturn([
+                'foo' => 'bar',
+            ]);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+
+        $action = new CreateTransactionAction();
+        $action->setApi($api);
+        try {
+            $action->execute($request);
+        } catch (HttpResponse $response) {
+            $this->assertSame('fooApiEndpoint', $response->getUrl());
+            $this->assertSame([
+                'foo' => 'bar',
+            ], $response->getFields());
+        }
+    }
 }
