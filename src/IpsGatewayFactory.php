@@ -23,7 +23,7 @@ class IpsGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'ips',
             'payum.factory_title' => 'Ips',
             'payum.action.capture' => new CaptureAction(),
-            'payum.action.refund' => new NotifyAction(),
+            'payum.action.nofity' => new NotifyAction(),
             'payum.action.sync' => new SyncAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
