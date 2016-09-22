@@ -8,6 +8,9 @@ use PayumTW\Ips\Action\CaptureAction;
 use PayumTW\Ips\Action\ConvertPaymentAction;
 use PayumTW\Ips\Action\NotifyAction;
 use PayumTW\Ips\Action\StatusAction;
+use PayumTW\Ips\Action\SyncAction;
+use PayumTW\Ips\Action\Api\CreateTransactionAction;
+use PayumTW\Ips\Action\Api\GetTransactionDataAction;
 
 class IpsGatewayFactory extends GatewayFactory
 {
@@ -20,9 +23,13 @@ class IpsGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'ips',
             'payum.factory_title' => 'Ips',
             'payum.action.capture' => new CaptureAction(),
-            'payum.action.notify' => new NotifyAction(),
+            'payum.action.refund' => new NotifyAction(),
+            'payum.action.sync' => new SyncAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
+
+            'payum.action.api.create_transaction' => new CreateTransactionAction(),
+            'payum.action.api.get_transaction_data' => new GetTransactionDataAction(),
         ]);
 
         if (false == $config['payum.api']) {

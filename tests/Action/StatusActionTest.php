@@ -22,7 +22,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
 
         $action = new StatusAction();
         $request = m::mock(GetStatusInterface::class);
-        $model = new ArrayObject();
+        $details = new ArrayObject();
 
         /*
         |------------------------------------------------------------
@@ -31,7 +31,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         */
 
         $request
-            ->shouldReceive('getModel')->andReturn($model)->twice()
+            ->shouldReceive('getModel')->andReturn($details)->twice()
             ->shouldReceive('markNew')->once();
 
         /*
@@ -53,7 +53,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
 
         $action = new StatusAction();
         $request = m::mock(GetStatusInterface::class);
-        $model = new ArrayObject([
+        $details = new ArrayObject([
             'paymentResult' => 'foo',
             'RspCode' => '000000',
         ]);
@@ -65,7 +65,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         */
 
         $request
-            ->shouldReceive('getModel')->andReturn($model)->twice()
+            ->shouldReceive('getModel')->andReturn($details)->twice()
             ->shouldReceive('markCaptured')->once();
 
         /*
@@ -87,7 +87,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
 
         $action = new StatusAction();
         $request = m::mock(GetStatusInterface::class);
-        $model = new ArrayObject([
+        $details = new ArrayObject([
             'paymentResult' => 'foo',
             'RspCode' => '-1',
         ]);
@@ -99,7 +99,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         */
 
         $request
-            ->shouldReceive('getModel')->andReturn($model)->twice()
+            ->shouldReceive('getModel')->andReturn($details)->twice()
             ->shouldReceive('markFailed')->once();
 
         /*

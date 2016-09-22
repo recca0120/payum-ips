@@ -19,12 +19,7 @@ class GetTransactionDataAction extends BaseApiAwareAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        dump($this->api->getTransactionData((array) $details));
-        exit;
-
         $details->replace($this->api->getTransactionData((array) $details));
-
-
     }
 
     /**

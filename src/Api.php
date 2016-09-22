@@ -77,14 +77,14 @@ class Api
     }
 
     /**
-     * preparePayment.
+     * createTransaction.
      *
      * @param array $params
      * @param mixed $request
      *
      * @return array
      */
-    public function preparePayment(array $params)
+    public function createTransaction(array $params)
     {
         $supportedParams = [
             'Version' => $this->options['Version'],
@@ -240,7 +240,28 @@ class Api
         $params = $this->split($params);
         $body = $this->addCdata($params['body']);
 
-        dump($params, $body);
+        // "head" => array:6 [▼
+        //   "ReferenceID" => ""
+        //   "RspCode" => "000000"
+        //   "RspMsg" => "交易成功！"
+        //   "ReqDate" => "20160922115657"
+        //   "RspDate" => "20160922115726"
+        //   "Signature" => "6e521198674636da79907d92a527cafe"
+        // ]
+        // "body" => array:12 [▼
+        //   "MerBillNo" => "57e3560d0361d"
+        //   "CurrencyType" => "156"
+        //   "Amount" => "0.1"
+        //   "Date" => "20160922"
+        //   "Status" => "Y"
+        //   "Msg" => "支付成功！"
+        //   "IpsBillNo" => "BO20160922115447069368"
+        //   "IpsTradeNo" => "2016092211095717482"
+        //   "RetEncodeType" => "17"
+        //   "BankBillNo" => "710002896036"
+        //   "ResultType" => "0"
+        //   "IpsBillTime" => "20160922115721"
+        // ]
 
         return hash('md5', $this->convertToXML(['body' => $body]).$this->options['MerCode'].$this->options['MerKey']);
     }
@@ -258,25 +279,25 @@ class Api
     }
 
     /**
-     * parseResult.
+     * getTransactionData.
      *
      * @param mixed $params
      *
      * @return array
      */
-    public function parseResult($params)
+    public function getTransactionData(array $params)
     {
-        $paymentResult = str_replace(['<![CDATA[', ']]>'], '', $params['paymentResult']);
-        $params = array_merge($params, $this->parsePaymentResult($paymentResult));
+        $paymentResult = $this->parsePaymentResult(str_replace(['<![CDATA[', ']]>'], '', $params['paymentResult']));
+        $details = array_merge($params, $paymentResult);
 
-        if ($this->verifyHash($params) === false) {
-            $params['RspCode'] = '-1';
-            $params['RspMsg'] = '驗證失敗';
+        if ($this->verifyHash($paymentResult) === false) {
+            $details['RspCode'] = '-1';
+            $details['RspMsg'] = '驗證失敗';
         }
 
-        $params['statusReason'] = $params['RspMsg'];
+        $details['statusReason'] = $details['RspMsg'];
 
-        return $params;
+        return $details;
     }
 
     /**

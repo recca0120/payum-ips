@@ -12,7 +12,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function test_prepare_payment()
+    public function test_create_transaction()
     {
         /*
         |------------------------------------------------------------
@@ -66,11 +66,11 @@ class ApiTest extends PHPUnit_Framework_TestCase
         $expected = [
             'pGateWayReq' => '<Ips><GateWayReq><head><Version>v1.0.0</Version><MerCode>c5374addd1a3d024c3a026199cb8feaf</MerCode><Account>b02e072eee68d65bff916e08b4f11df2</Account><ReqDate>20160903021801</ReqDate><Signature>527c01c2b04d4f8b198180ba72b0f66e</Signature></head><body><MerBillNo>57c9aca80fdb4</MerBillNo><GatewayType>01</GatewayType><Date>20160903</Date><CurrencyType>156</CurrencyType><Amount>0.01</Amount><Lang>GB</Lang><Merchanturl><![CDATA[http://localhost/baotao/public/payment/capture/PHEzq0mjdqXM8EH7TQ3jDL6ONJMnBkt85BVrzK2TbJU]]></Merchanturl><FailUrl><![CDATA[http://localhost/baotao/public/payment/capture/PHEzq0mjdqXM8EH7TQ3jDL6ONJMnBkt85BVrzK2TbJU]]></FailUrl><OrderEncodeType>5</OrderEncodeType><RetEncodeType>17</RetEncodeType><RetType>1</RetType><ServerUrl><![CDATA[http://localhost/baotao/public/payment/notify/Fz2WIYvQs1KPc3tRUGNKtOnkHFZuF4segpRnZdphze8]]></ServerUrl><GoodsName><![CDATA[商品名稱]]></GoodsName></body></GateWayReq></Ips>',
         ];
-        $this->assertSame($expected, $api->preparePayment($params));
+        $this->assertSame($expected, $api->createTransaction($params));
         $this->assertSame('https://newpay.ips.com.cn/psfp-entry/gateway/payment.do', $api->getApiEndpoint());
     }
 
-    public function test_parse_result()
+    public function test_get_transaction_data()
     {
         /*
         |------------------------------------------------------------
@@ -108,7 +108,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $params = $api->parseResult($params);
+        $params = $api->getTransactionData($params);
 
         $expected = [
             'ReferenceID' => '',
@@ -137,7 +137,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function test_parse_result_fail()
+    public function test_get_transaction_data_fail()
     {
         /*
         |------------------------------------------------------------
@@ -175,7 +175,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $params = $api->parseResult($params);
+        $params = $api->getTransactionData($params);
         $this->assertSame('-1', $params['RspCode']);
     }
 
@@ -214,7 +214,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         */
 
         $this->assertTrue($api->isSandbox());
-        $params = $api->parseResult($api->generateTestingResponse());
+        $params = $api->getTransactionData($api->generateTestingResponse());
         $this->assertSame('000000', $params['RspCode']);
     }
 }

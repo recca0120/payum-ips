@@ -6,8 +6,8 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use PayumTW\Ips\Action\NotifyAction;
-use PayumTW\Ips\Api;
 
 class NotifyActionTest extends PHPUnit_Framework_TestCase
 {
@@ -27,8 +27,7 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         $action = new NotifyAction();
         $gateway = m::mock(GatewayInterface::class);
         $request = m::mock(Notify::class);
-        $api = m::mock(Api::class);
-        $model = new ArrayObject([
+        $details = new ArrayObject([
             'MerBillNo' => 'foo',
         ]);
 
@@ -38,15 +37,11 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once();
+        $gateway
+            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()
+            ->shouldReceive('execute')->with(m::type(Sync::class))->once();
 
-        $api
-            ->shouldReceive('parseResult')->once()->andReturn([
-                'MerBillNo' => 'foo',
-            ])
-            ->shouldReceive('verifyHash')->once()->andReturn(true);
-
-        $request->shouldReceive('getModel')->twice()->andReturn($model);
+        $request->shouldReceive('getModel')->twice()->andReturn($details);
 
         /*
         |------------------------------------------------------------
@@ -55,7 +50,6 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action->setGateway($gateway);
-        $action->setApi($api);
         try {
             $action->execute($request);
         } catch (HttpResponse $response) {
@@ -75,9 +69,9 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         $action = new NotifyAction();
         $gateway = m::mock(GatewayInterface::class);
         $request = m::mock(Notify::class);
-        $api = m::mock(Api::class);
-        $model = new ArrayObject([
+        $details = new ArrayObject([
             'MerBillNo' => 'foo',
+            'RspCode' => '-1',
         ]);
 
         /*
@@ -86,15 +80,11 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once();
+        $gateway
+            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()
+            ->shouldReceive('execute')->with(m::type(Sync::class))->once();
 
-        $api
-            ->shouldReceive('parseResult')->once()->andReturn([
-                'MerBillNo' => 'foo',
-            ])
-            ->shouldReceive('verifyHash')->once()->andReturn(false);
-
-        $request->shouldReceive('getModel')->twice()->andReturn($model);
+        $request->shouldReceive('getModel')->twice()->andReturn($details);
 
         /*
         |------------------------------------------------------------
@@ -103,59 +93,10 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action->setGateway($gateway);
-        $action->setApi($api);
         try {
             $action->execute($request);
         } catch (HttpResponse $response) {
             $this->assertSame('Signature verify fail.', $response->getContent());
-            $this->assertSame(400, $response->getStatusCode());
-        }
-    }
-
-    public function test_notify_mer_mbill_no_fail()
-    {
-        /*
-        |------------------------------------------------------------
-        | Set
-        |------------------------------------------------------------
-        */
-
-        $action = new NotifyAction();
-        $gateway = m::mock(GatewayInterface::class);
-        $request = m::mock(Notify::class);
-        $api = m::mock(Api::class);
-        $model = new ArrayObject([
-            'MerBillNo' => 'foo',
-        ]);
-
-        /*
-        |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once();
-
-        $api
-            ->shouldReceive('parseResult')->once()->andReturn([
-                'MerBillNo' => 'bar',
-            ])
-            ->shouldReceive('verifyHash')->once()->andReturn(true);
-
-        $request->shouldReceive('getModel')->twice()->andReturn($model);
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
-
-        $action->setGateway($gateway);
-        $action->setApi($api);
-        try {
-            $action->execute($request);
-        } catch (HttpResponse $response) {
-            $this->assertSame('MerBillNo fail.', $response->getContent());
             $this->assertSame(400, $response->getStatusCode());
         }
     }
