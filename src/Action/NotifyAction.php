@@ -8,7 +8,6 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
-use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 
@@ -25,11 +24,6 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
         $details = ArrayObject::ensureArrayObject($request->getModel());
-
-        $httpRequest = new GetHttpRequest();
-        $this->gateway->execute($httpRequest);
-
-        $details->replace($httpRequest->request);
 
         $this->gateway->execute(new Sync($details));
 

@@ -59,7 +59,7 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
-	public function test_sandbox()
+    public function test_sandbox()
     {
         /*
         |------------------------------------------------------------
@@ -79,7 +79,7 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
 
         $request->shouldReceive('getModel')->twice()->andReturn($details);
 
-		$details['Merchanturl'] = 'fooApiEndpoint';
+        $details['Merchanturl'] = 'fooApiEndpoint';
 
         $api
             ->shouldReceive('isSandbox')->once()->andReturn(true)

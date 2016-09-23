@@ -4,7 +4,6 @@ use Mockery as m;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
-use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use PayumTW\Ips\Action\NotifyAction;
@@ -37,9 +36,7 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway
-            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()
-            ->shouldReceive('execute')->with(m::type(Sync::class))->once();
+        $gateway->shouldReceive('execute')->with(m::type(Sync::class))->once();
 
         $request->shouldReceive('getModel')->twice()->andReturn($details);
 
@@ -79,9 +76,7 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway
-            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()
-            ->shouldReceive('execute')->with(m::type(Sync::class))->once();
+        $gateway->shouldReceive('execute')->with(m::type(Sync::class))->once();
 
         $request->shouldReceive('getModel')->twice()->andReturn($details);
 

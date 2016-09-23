@@ -20,13 +20,13 @@ class StatusAction implements ActionInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (isset($details['paymentResult']) === false) {
+        if (isset($details['RspCode']) === false) {
             $request->markNew();
 
             return;
         }
 
-        if (isset($details['paymentResult']) === true && $details['RspCode'] === '000000') {
+        if ($details['RspCode'] === '000000') {
             $request->markCaptured();
 
             return;

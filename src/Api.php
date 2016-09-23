@@ -264,7 +264,7 @@ class Api
      */
     public function getTransactionData(array $params)
     {
-        $paymentResult = $this->parsePaymentResult(str_replace(['<![CDATA[', ']]>'], '', $params['paymentResult']));
+        $paymentResult = $this->parsePaymentResult(str_replace(['<![CDATA[', ']]>'], '', $params['response']['paymentResult']));
         $details = array_merge($params, $paymentResult);
 
         if ($this->verifyHash($paymentResult) === false) {
@@ -367,7 +367,9 @@ class Api
         ));
 
         return [
-            'paymentResult' => $this->generatGetwayRequest($params),
+            'response' => [
+                'paymentResult' => $this->generatGetwayRequest($params),
+            ],
         ];
     }
 }

@@ -33,8 +33,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->request['paymentResult']) === true) {
-            $details->replace($httpRequest->request);
-
             $this->gateway->execute(new Sync($details));
 
             return;

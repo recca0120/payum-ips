@@ -107,8 +107,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
             $httpRequest->request = $expected;
         })->shouldReceive('execute')->with(m::type(Sync::class));
 
-        $request
-            ->shouldReceive('getModel')->twice()->andReturn($details);
+        $request->shouldReceive('getModel')->twice()->andReturn($details);
 
         /*
         |------------------------------------------------------------
@@ -119,6 +118,5 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         $action->setGateway($gateway);
         $action->setGenericTokenFactory($tokenFactory);
         $action->execute($request);
-        $this->assertSame($expected, (array) $details);
     }
 }
