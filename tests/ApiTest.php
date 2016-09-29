@@ -1,8 +1,6 @@
 <?php
 
-use Http\Message\MessageFactory;
 use Mockery as m;
-use Payum\Core\HttpClientInterface;
 use PayumTW\Ips\Api;
 
 class ApiTest extends PHPUnit_Framework_TestCase
@@ -46,8 +44,8 @@ class ApiTest extends PHPUnit_Framework_TestCase
             'GoodsName' => '商品名稱',
         ];
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------
@@ -93,8 +91,8 @@ class ApiTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------
@@ -162,8 +160,8 @@ class ApiTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------
@@ -200,8 +198,8 @@ class ApiTest extends PHPUnit_Framework_TestCase
             'sandbox' => true,
         ];
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------

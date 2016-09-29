@@ -1,8 +1,6 @@
 <?php
 
 use Mockery as m;
-use Payum\Core\Model\PaymentInterface;
-use Payum\Core\Request\Convert;
 use PayumTW\Ips\Action\ConvertPaymentAction;
 
 class ConvertPaymentActionTest extends PHPUnit_Framework_TestCase
@@ -21,8 +19,8 @@ class ConvertPaymentActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new ConvertPaymentAction();
-        $request = m::mock(Convert::class);
-        $payment = m::mock(PaymentInterface::class);
+        $request = m::mock('Payum\Core\Request\Convert');
+        $payment = m::mock('Payum\Core\Model\PaymentInterface');
 
         /*
         |------------------------------------------------------------

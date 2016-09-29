@@ -4,8 +4,6 @@ use Mockery as m;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Reply\HttpResponse;
 use PayumTW\Ips\Action\Api\CreateTransactionAction;
-use PayumTW\Ips\Api;
-use PayumTW\Ips\Request\Api\CreateTransaction;
 
 class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
 {
@@ -22,8 +20,8 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $api = m::mock(Api::class);
-        $request = m::mock(CreateTransaction::class);
+        $api = m::mock('PayumTW\Ips\Api');
+        $request = m::mock('PayumTW\Ips\Request\Api\CreateTransaction');
         $details = new ArrayObject();
 
         /*
@@ -67,8 +65,8 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $api = m::mock(Api::class);
-        $request = m::mock(CreateTransaction::class);
+        $api = m::mock('PayumTW\Ips\Api');
+        $request = m::mock('PayumTW\Ips\Request\Api\CreateTransaction');
         $details = new ArrayObject();
 
         /*
