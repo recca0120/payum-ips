@@ -1,8 +1,8 @@
 <?php
 
 use Mockery as m;
-use Payum\Core\Bridge\Spl\ArrayObject;
 use PayumTW\Ips\Action\CaptureAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 
 class CaptureActionTest extends PHPUnit_Framework_TestCase
 {

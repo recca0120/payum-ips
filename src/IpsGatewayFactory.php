@@ -2,15 +2,15 @@
 
 namespace PayumTW\Ips;
 
-use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
-use PayumTW\Ips\Action\Api\CreateTransactionAction;
-use PayumTW\Ips\Action\Api\GetTransactionDataAction;
-use PayumTW\Ips\Action\CaptureAction;
-use PayumTW\Ips\Action\ConvertPaymentAction;
+use PayumTW\Ips\Action\SyncAction;
 use PayumTW\Ips\Action\NotifyAction;
 use PayumTW\Ips\Action\StatusAction;
-use PayumTW\Ips\Action\SyncAction;
+use PayumTW\Ips\Action\CaptureAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use PayumTW\Ips\Action\ConvertPaymentAction;
+use PayumTW\Ips\Action\Api\CreateTransactionAction;
+use PayumTW\Ips\Action\Api\GetTransactionDataAction;
 
 class IpsGatewayFactory extends GatewayFactory
 {

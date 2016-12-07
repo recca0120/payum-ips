@@ -34,7 +34,7 @@ class GetTransactionDataActionTest extends PHPUnit_Framework_TestCase
 
         $api
             ->shouldReceive('getTransactionData')->andReturn([
-                'RspCode' => '1'
+                'RspCode' => '1',
             ]);
 
         $action = new GetTransactionDataAction();
@@ -73,11 +73,9 @@ class GetTransactionDataActionTest extends PHPUnit_Framework_TestCase
         $request
             ->shouldReceive('getModel')->andReturn($details);
 
-
-
         $api
             ->shouldReceive('getTransactionData')->andReturn([
-                'RspCode' => '-1'
+                'RspCode' => '-1',
             ]);
 
         $action = new GetTransactionDataAction();
