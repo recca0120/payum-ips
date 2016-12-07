@@ -269,10 +269,7 @@ class Api
 
         if ($this->verifyHash($paymentResult) === false) {
             $details['RspCode'] = '-1';
-            $details['RspMsg'] = '驗證失敗';
         }
-
-        $details['statusReason'] = $details['RspMsg'];
 
         return $details;
     }
