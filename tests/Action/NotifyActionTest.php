@@ -62,7 +62,7 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
             $action->execute($request);
         } catch (ReplyInterface $e) {
             $this->assertSame(200, $e->getStatusCode());
-            $this->assertSame('1|OK', $e->getContent());
+            $this->assertSame('1', $e->getContent());
         }
 
         $request->shouldHaveReceived('getModel')->twice();
@@ -120,7 +120,7 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
             $action->execute($request);
         } catch (ReplyInterface $e) {
             $this->assertSame(400, $e->getStatusCode());
-            $this->assertSame('0|CheckMacValue verify fail.', $e->getContent());
+            $this->assertSame('Signature verify fail.', $e->getContent());
         }
 
         $request->shouldHaveReceived('getModel')->twice();
