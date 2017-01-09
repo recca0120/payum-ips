@@ -2,6 +2,7 @@
 
 namespace PayumTW\Ips\Action\Api;
 
+use Payum\Core\Request\Sync;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Reply\HttpPostRedirect;
 use PayumTW\Ips\Request\Api\CreateTransaction;
@@ -21,10 +22,7 @@ class CreateTransactionAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($this->api->isSandbox() === true) {
-            throw new HttpPostRedirect(
-                $details['Merchanturl'],
-                $this->api->generateTestingResponse((array) $details)
-            );
+            $details->replace($this->api->generateTestingResponse((array) $details));
 
             return;
         }
