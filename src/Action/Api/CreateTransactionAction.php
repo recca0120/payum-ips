@@ -21,10 +21,7 @@ class CreateTransactionAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($this->api->isSandbox() === true) {
-            throw new HttpPostRedirect(
-                $details['Merchanturl'],
-                $this->api->generateTestingResponse((array) $details)
-            );
+            $details->replace($this->api->generateTestingResponse((array) $details));
 
             return;
         }

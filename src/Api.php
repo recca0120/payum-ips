@@ -363,10 +363,10 @@ class Api
             array_intersect_key($params, $supportedParams)
         ));
 
-        return [
+        return array_merge($params, [
             'response' => [
                 'paymentResult' => $this->generatGetwayRequest($params),
             ],
-        ];
+        ]);
     }
 }
