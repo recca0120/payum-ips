@@ -170,7 +170,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         */
 
         $this->assertTrue($api->isSandbox());
-        $params = $api->parsePaymentResult($api->generateTestingResponse()['paymentResult']);
+        $params = $api->parsePaymentResult($api->generateTestingResponse());
         $this->assertSame('000000', $params['RspCode']);
     }
 }

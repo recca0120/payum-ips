@@ -364,8 +364,6 @@ class Api
             array_intersect_key($params, $supportedParams)
         ));
 
-        return array_merge($params, [
-            'paymentResult' => $this->generatGetwayRequest($params),
-        ]);
+        return $this->generatGetwayRequest($params);
     }
 }

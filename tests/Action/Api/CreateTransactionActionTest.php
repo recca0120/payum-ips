@@ -83,7 +83,8 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('isSandbox')->once()->andReturn(true)
             ->shouldReceive('generateTestingResponse')->once()->andReturn([
                 'foo' => 'bar',
-            ]);
+            ])
+            ->shouldReceive('parsePaymentResult')->andReturn([]);
 
         /*
         |------------------------------------------------------------
