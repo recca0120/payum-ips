@@ -75,6 +75,7 @@ class Api
     {
         $map = [
             'capture' => 'https://newpay.ips.com.cn/psfp-entry/gateway/payment.do',
+            'h5' => 'https://mobilegw.ips.com.cn/psfp-mgw/paymenth5.do',
             'refund' => 'https://newpay.ips.com.cn/psfp-entry/services/refund?wsdl',
             'order' => 'https://newpay.ips.com.cn/psfp-entry/services/order?wsdl',
             'trade' => 'https://newpay.ips.com.cn/psfp-entry/services/trade?wsdl',
