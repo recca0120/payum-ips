@@ -34,7 +34,7 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
 
         $api
             ->shouldReceive('isSandbox')->once()->andReturn(false)
-            ->shouldReceive('getApiEndpoint')->once()->andReturn('fooApiEndpoint')
+            ->shouldReceive('getApiEndpoint')->with('capture')->once()->andReturn('fooApiEndpoint')
             ->shouldReceive('createTransaction')->once()->andReturn([
                 'foo' => 'bar',
             ]);

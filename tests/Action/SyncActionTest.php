@@ -15,30 +15,30 @@ class SyncActionTest extends PHPUnit_Framework_TestCase
     {
         /*
         |------------------------------------------------------------
-        | Set
+        | Arrange
         |------------------------------------------------------------
         */
 
-        $action = new SyncAction();
-        $gateway = m::mock('Payum\Core\GatewayInterface');
-        $request = m::mock('Payum\Core\Request\Sync');
+        $gateway = m::spy('Payum\Core\GatewayInterface');
+        $request = m::spy('Payum\Core\Request\Sync');
         $details = new ArrayObject();
 
         /*
         |------------------------------------------------------------
-        | Expectation
+        | Act
         |------------------------------------------------------------
         */
 
         $request->shouldReceive('getModel')->andReturn($details)->twice();
 
         $gateway
-            ->shouldReceive('execute')->with(m::type('Payum\Core\Request\GetHttpRequest'))->once()
             ->shouldReceive('execute')->with(m::type('PayumTW\Ips\Request\Api\GetTransactionData'))->once();
+
+        $action = new SyncAction();
 
         /*
         |------------------------------------------------------------
-        | Assertion
+        | Assert
         |------------------------------------------------------------
         */
 

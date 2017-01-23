@@ -71,9 +71,16 @@ class Api
      *
      * @return string
      */
-    public function getApiEndpoint()
+    public function getApiEndpoint($type = 'capture')
     {
-        return 'https://newpay.ips.com.cn/psfp-entry/gateway/payment.do';
+        $map = [
+            'capture' => 'https://newpay.ips.com.cn/psfp-entry/gateway/payment.do',
+            'refund' => 'https://newpay.ips.com.cn/psfp-entry/services/refund?wsdl',
+            'order' => 'https://newpay.ips.com.cn/psfp-entry/services/order?wsdl',
+            'trade' => 'https://newpay.ips.com.cn/psfp-entry/services/trade?wsdl',
+        ];
+
+        return $map[$type];
     }
 
     /**
@@ -135,6 +142,54 @@ class Api
         return [
             'pGateWayReq' => $this->generatGetwayRequest($params),
         ];
+    }
+
+    /**
+     * getTransactionData.
+     *
+     * @param mixed $params
+     *
+     * @return array
+     */
+    public function getTransactionData(array $params)
+    {
+        // to do soap
+    }
+
+    /**
+     * Verify if the hash of the given parameter is correct.
+     *
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function verifyHash(array $params)
+    {
+        return $params['Signature'] === $this->calculateHash($params);
+    }
+
+    /**
+     * parsePaymentResult.
+     *
+     * @method parsePaymentResult
+     *
+     * @param string $paymentResult
+     *
+     * @return array
+     */
+    public function parsePaymentResult($paymentResult)
+    {
+        $paymentResult = str_replace(['<![CDATA[', ']]>'], '', $paymentResult);
+        $result = [];
+        $tags = $this->parseResultTags($paymentResult);
+        $regexp = '/<(?<key>'.implode('|', $tags).')>(?<value>[^<]*)<\/('.implode('|', $tags).')>/';
+        if (preg_match_all($regexp, $paymentResult, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $result[$match['key']] = $match['value'];
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -244,37 +299,6 @@ class Api
     }
 
     /**
-     * Verify if the hash of the given parameter is correct.
-     *
-     * @param array $params
-     *
-     * @return bool
-     */
-    public function verifyHash(array $params)
-    {
-        return $params['Signature'] === $this->calculateHash($params);
-    }
-
-    /**
-     * getTransactionData.
-     *
-     * @param mixed $params
-     *
-     * @return array
-     */
-    public function getTransactionData(array $params)
-    {
-        $paymentResult = $this->parsePaymentResult(str_replace(['<![CDATA[', ']]>'], '', $params['response']['paymentResult']));
-        $details = array_merge($params, $paymentResult);
-
-        if ($this->verifyHash($paymentResult) === false) {
-            $details['RspCode'] = '-1';
-        }
-
-        return $details;
-    }
-
-    /**
      * parseResultTags.
      *
      * @method parseResultTags
@@ -288,29 +312,6 @@ class Api
         $result = [];
         if (preg_match_all('/<([^\/]+?)>/', $paymentResult, $tags)) {
             $result = array_diff($tags[1], ['Ips', 'GateWayRsp', 'head', 'body']);
-        }
-
-        return $result;
-    }
-
-    /**
-     * parsePaymentResult.
-     *
-     * @method parsePaymentResult
-     *
-     * @param string $paymentResult
-     *
-     * @return array
-     */
-    protected function parsePaymentResult($paymentResult)
-    {
-        $result = [];
-        $tags = $this->parseResultTags($paymentResult);
-        $regexp = '/<(?<key>'.implode('|', $tags).')>(?<value>[^<]*)<\/('.implode('|', $tags).')>/';
-        if (preg_match_all($regexp, $paymentResult, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-                $result[$match['key']] = $match['value'];
-            }
         }
 
         return $result;
@@ -364,9 +365,7 @@ class Api
         ));
 
         return array_merge($params, [
-            'response' => [
-                'paymentResult' => $this->generatGetwayRequest($params),
-            ],
+            'paymentResult' => $this->generatGetwayRequest($params),
         ]);
     }
 }

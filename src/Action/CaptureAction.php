@@ -9,12 +9,13 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetHttpRequest;
+use PayumTW\Ips\Action\Api\BaseApiAwareAction;
 use PayumTW\Ips\Request\Api\CreateTransaction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 
-class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
+class CaptureAction extends BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
@@ -33,7 +34,14 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->request['paymentResult']) === true) {
-            $this->gateway->execute(new Sync($details));
+            $params = array_merge(
+                $httpRequest->request,
+                $this->api->parsePaymentResult($httpRequest->request['paymentResult'])
+            );
+            if ($this->api->verifyHash($params) === false) {
+                $result['RspCode'] = '-1';
+            }
+            $details->replace($params);
 
             return;
         }
