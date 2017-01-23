@@ -15,7 +15,7 @@ class IpsGatewayFactoryTest extends PHPUnit_Framework_TestCase
     {
         /*
         |------------------------------------------------------------
-        | Set
+        | Arrange
         |------------------------------------------------------------
         */
 
@@ -24,28 +24,30 @@ class IpsGatewayFactoryTest extends PHPUnit_Framework_TestCase
 
         /*
         |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
+        | Act
         |------------------------------------------------------------
         */
 
         $gateway = new IpsGatewayFactory();
         $config = $gateway->createConfig([
             'payum.api' => false,
-            'MerCode' => md5(rand()),
-            'MerKey' => md5(rand()),
-            'Account' => md5(rand()),
             'payum.required_options' => [],
             'payum.http_client' => $httpClient,
             'httplug.message_factory' => $message,
+            'MerCode' => md5(rand()),
+            'MerKey' => md5(rand()),
+            'Account' => md5(rand()),
+            'sandbox' => true,
         ]);
 
         $api = call_user_func($config['payum.api'], ArrayObject::ensureArrayObject($config));
+
+        /*
+        |------------------------------------------------------------
+        | Assert
+        |------------------------------------------------------------
+        */
+
         $this->assertInstanceOf('PayumTW\Ips\Api', $api);
     }
 }

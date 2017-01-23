@@ -12,95 +12,102 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function test_get_transaction_data()
+    public function test_redirect_to_ips()
     {
         /*
         |------------------------------------------------------------
-        | Set
+        | Arrange
         |------------------------------------------------------------
         */
 
-        $api = m::mock('PayumTW\Ips\Api');
-        $request = m::mock('PayumTW\Ips\Request\Api\CreateTransaction');
-        $details = new ArrayObject();
+        $api = m::spy('PayumTW\Ips\Api');
+        $request = m::spy('PayumTW\Ips\Request\Api\CreateTransaction');
+        $details = new ArrayObject([]);
+        $endpoint = 'foo';
 
         /*
         |------------------------------------------------------------
-        | Expectation
+        | Act
         |------------------------------------------------------------
         */
 
-        $request->shouldReceive('getModel')->twice()->andReturn($details);
+        $request
+            ->shouldReceive('getModel')->andReturn($details);
 
         $api
-            ->shouldReceive('isSandbox')->once()->andReturn(false)
-            ->shouldReceive('getApiEndpoint')->with('capture')->once()->andReturn('fooApiEndpoint')
-            ->shouldReceive('createTransaction')->once()->andReturn([
-                'foo' => 'bar',
-            ]);
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
+            ->shouldReceive('isSandbox')->andReturn(false)
+            ->shouldReceive('getApiEndpoint')->andReturn($endpoint)
+            ->shouldReceive('createTransaction')->andReturn($details->toUnsafeArray());
 
         $action = new CreateTransactionAction();
         $action->setApi($api);
+
+        /*
+        |------------------------------------------------------------
+        | Assert
+        |------------------------------------------------------------
+        */
+
         try {
             $action->execute($request);
         } catch (HttpResponse $response) {
-            $this->assertSame('fooApiEndpoint', $response->getUrl());
-            $this->assertSame([
-                'foo' => 'bar',
-            ], $response->getFields());
+            $this->assertSame($endpoint, $response->getUrl());
+            $this->assertSame($details->toUnsafeArray(), $response->getFields());
         }
+
+        $request->shouldHaveReceived('getModel')->twice();
+        $api->shouldHaveReceived('isSandbox')->once();
+        $api->shouldHaveReceived('getApiEndpoint')->with('capture')->once();
+        $api->shouldHaveReceived('createTransaction')->with($details->toUnsafeArray())->once();
     }
 
     public function test_sandbox()
     {
         /*
         |------------------------------------------------------------
-        | Set
+        | Arrange
         |------------------------------------------------------------
         */
 
-        $api = m::mock('PayumTW\Ips\Api');
-        $request = m::mock('PayumTW\Ips\Request\Api\CreateTransaction');
-        $details = new ArrayObject();
+        $api = m::spy('PayumTW\Ips\Api');
+        $request = m::spy('PayumTW\Ips\Request\Api\CreateTransaction');
+        $details = new ArrayObject([]);
+        $endpoint = 'foo';
 
         /*
         |------------------------------------------------------------
-        | Expectation
+        | Act
         |------------------------------------------------------------
         */
 
-        $request->shouldReceive('getModel')->twice()->andReturn($details);
-
-        $details['Merchanturl'] = 'fooApiEndpoint';
+        $request
+            ->shouldReceive('getModel')->andReturn($details);
 
         $api
-            ->shouldReceive('isSandbox')->once()->andReturn(true)
-            ->shouldReceive('generateTestingResponse')->once()->andReturn([
-                'foo' => 'bar',
-            ])
-            ->shouldReceive('parsePaymentResult')->andReturn([]);
+            ->shouldReceive('isSandbox')->andReturn(true)
+            ->shouldReceive('generateTestingResponse')->andReturn($details->toUnsafeArray())
+            ->shouldReceive('parsePaymentResult')->andReturn($details->toUnsafeArray());
 
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
 
         $action = new CreateTransactionAction();
         $action->setApi($api);
+
+        /*
+        |------------------------------------------------------------
+        | Assert
+        |------------------------------------------------------------
+        */
+
         try {
             $action->execute($request);
         } catch (HttpResponse $response) {
-            $this->assertSame('fooApiEndpoint', $response->getUrl());
-            $this->assertSame([
-                'foo' => 'bar',
-            ], $response->getFields());
+            $this->assertSame($endpoint, $response->getUrl());
+            $this->assertSame($details->toUnsafeArray(), $response->getFields());
         }
+
+        $request->shouldHaveReceived('getModel')->twice();
+        $api->shouldHaveReceived('isSandbox')->once();
+        $api->shouldHaveReceived('generateTestingResponse')->with($details->toUnsafeArray())->once();
+        $api->shouldHaveReceived('parsePaymentResult')->with($details->toUnsafeArray())->once();
     }
 }

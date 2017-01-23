@@ -10,46 +10,53 @@ class ConvertPaymentActionTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function test_convert()
+    public function test_execute()
     {
         /*
         |------------------------------------------------------------
-        | Set
+        | Arrange
         |------------------------------------------------------------
         */
 
-        $action = new ConvertPaymentAction();
-        $request = m::mock('Payum\Core\Request\Convert');
-        $payment = m::mock('Payum\Core\Model\PaymentInterface');
+        $request = m::spy('Payum\Core\Request\Convert');
+        $source = m::spy('Payum\Core\Model\PaymentInterface');
+        $details = new ArrayObject();
+
+        $number = uniqid();
+        $totalAmount = 1000;
 
         /*
         |------------------------------------------------------------
-        | Expectation
+        | Act
         |------------------------------------------------------------
         */
 
         $request
-            ->shouldReceive('getSource')->twice()->andReturn($payment)
-            ->shouldReceive('getTo')->once()->andReturn('array');
+            ->shouldReceive('getSource')->andReturn($source)
+            ->shouldReceive('getTo')->andReturn('array');
 
-        $payment
-            ->shouldReceive('getDetails')->andReturn([])
-            ->shouldReceive('getNumber')->andReturn('fooMerBillNo')
-            ->shouldReceive('getTotalAmount')->andReturn('fooAmount');
+        $source
+            ->shouldReceive('getDetails')->andReturn($details)
+            ->shouldReceive('getNumber')->andReturn($number)
+            ->shouldReceive('getTotalAmount')->andReturn($totalAmount);
+
+        $action = new ConvertPaymentAction();
+        $action->execute($request);
 
         /*
         |------------------------------------------------------------
-        | Assertion
+        | Assert
         |------------------------------------------------------------
         */
 
-        $request->shouldReceive('setResult')->once()->andReturnUsing(function ($data) {
-            $this->assertSame([
-                'MerBillNo' => 'fooMerBillNo',
-                'Amount' => 'fooAmount',
-            ], $data);
-        });
-
-        $action->execute($request);
+        $request->shouldHaveReceived('getSource')->twice();
+        $request->shouldHaveReceived('getTo')->once();
+        $source->shouldHaveReceived('getDetails')->once();
+        $source->shouldHaveReceived('getNumber')->once();
+        $source->shouldHaveReceived('getTotalAmount')->once();
+        $request->shouldHaveReceived('setResult')->with([
+            'MerBillNo' => $number,
+            'Amount' => $totalAmount,
+        ])->once();
     }
 }
