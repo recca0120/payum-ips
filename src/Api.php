@@ -170,27 +170,26 @@ class Api
     }
 
     /**
-     * parsePaymentResult.
+     * parseResponse.
      *
-     * @method parsePaymentResult
+     * @method parseResponse
      *
-     * @param string $paymentResult
+     * @param string $response
      *
      * @return array
      */
-    public function parsePaymentResult($paymentResult)
+    public function parseResponse($response)
     {
-        $paymentResult = str_replace(['<![CDATA[', ']]>'], '', $paymentResult);
-        $result = [];
+        $paymentResult = str_replace(['<![CDATA[', ']]>'], '', $response['paymentResult']);
         $tags = $this->parseResultTags($paymentResult);
         $regexp = '/<(?<key>'.implode('|', $tags).')>(?<value>[^<]*)<\/('.implode('|', $tags).')>/';
         if (preg_match_all($regexp, $paymentResult, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
-                $result[$match['key']] = $match['value'];
+                $response[$match['key']] = $match['value'];
             }
         }
 
-        return $result;
+        return $response;
     }
 
     /**
@@ -365,6 +364,8 @@ class Api
             array_intersect_key($params, $supportedParams)
         ));
 
-        return $this->generatGetwayRequest($params);
+        return [
+            'paymentResult' => $this->generatGetwayRequest($params),
+        ];
     }
 }

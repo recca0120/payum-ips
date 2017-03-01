@@ -36,5 +36,14 @@
         "psr-4": {
             "PayumTW\\Ips\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PayumTW\\Ips\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }

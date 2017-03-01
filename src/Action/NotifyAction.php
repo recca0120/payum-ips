@@ -29,10 +29,7 @@ class NotifyAction extends BaseApiAwareAction implements ActionInterface, Gatewa
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
-        $params = array_merge(
-            $httpRequest->request,
-            $this->api->parsePaymentResult($httpRequest->request['paymentResult'])
-        );
+        $params = $this->api->parseResponse($httpRequest->request);
 
         if ($this->api->verifyHash($params) === false) {
             throw new HttpResponse('Signature verify fail.', 400, ['Content-Type' => 'text/plain']);

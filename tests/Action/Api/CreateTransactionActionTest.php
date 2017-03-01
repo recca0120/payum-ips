@@ -1,113 +1,56 @@
 <?php
 
+namespace PayumTW\Ips\Tests\Action\Api;
+
 use Mockery as m;
-use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\Capture;
+use PHPUnit\Framework\TestCase;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Reply\HttpPostRedirect;
+use PayumTW\Ips\Request\Api\CreateTransaction;
 use PayumTW\Ips\Action\Api\CreateTransactionAction;
 
-class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
+class CreateTransactionActionTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
     }
 
-    public function test_redirect_to_ips()
+    public function testExecute()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $api = m::spy('PayumTW\Ips\Api');
-        $request = m::spy('PayumTW\Ips\Request\Api\CreateTransaction');
-        $details = new ArrayObject([]);
-        $endpoint = 'foo';
-
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $request
-            ->shouldReceive('getModel')->andReturn($details);
-
-        $api
-            ->shouldReceive('isSandbox')->andReturn(false)
-            ->shouldReceive('getApiEndpoint')->andReturn($endpoint)
-            ->shouldReceive('createTransaction')->andReturn($details->toUnsafeArray());
-
         $action = new CreateTransactionAction();
-        $action->setApi($api);
+        $request = new CreateTransaction(new ArrayObject([]));
 
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
+        $action->setApi(
+            $api = m::mock('PayumTW\Ips\Api')
+        );
+        $api->shouldReceive('isSandbox')->once()->andReturn(false);
+        $api->shouldReceive('getApiEndpoint')->once()->with('capture')->andReturn($apiEndpoint = 'foo');
+        $api->shouldReceive('createTransaction')->once()->with((array) $request->getModel())->andReturn($params = ['foo' => 'bar']);
 
         try {
             $action->execute($request);
-        } catch (HttpResponse $response) {
-            $this->assertSame($endpoint, $response->getUrl());
-            $this->assertSame($details->toUnsafeArray(), $response->getFields());
+        } catch (HttpPostRedirect $e) {
+            $this->assertSame($apiEndpoint, $e->getUrl());
+            $this->assertSame($params, $e->getFields());
         }
-
-        $request->shouldHaveReceived('getModel')->twice();
-        $api->shouldHaveReceived('isSandbox')->once();
-        $api->shouldHaveReceived('getApiEndpoint')->with('capture')->once();
-        $api->shouldHaveReceived('createTransaction')->with($details->toUnsafeArray())->once();
     }
 
-    public function test_sandbox()
+    public function testExecuteSandbox()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $api = m::spy('PayumTW\Ips\Api');
-        $request = m::spy('PayumTW\Ips\Request\Api\CreateTransaction');
-        $details = new ArrayObject([]);
-        $endpoint = 'foo';
-
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $request
-            ->shouldReceive('getModel')->andReturn($details);
-
-        $api
-            ->shouldReceive('isSandbox')->andReturn(true)
-            ->shouldReceive('generateTestingResponse')->andReturn($details->toUnsafeArray())
-            ->shouldReceive('parsePaymentResult')->andReturn($details->toUnsafeArray());
-
-
         $action = new CreateTransactionAction();
-        $action->setApi($api);
+        $request = new CreateTransaction(new ArrayObject([]));
 
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
+        $action->setApi(
+            $api = m::mock('PayumTW\Ips\Api')
+        );
+        $api->shouldReceive('isSandbox')->once()->andReturn(true);
+        $params = ['foo' => 'bar'];
+        $api->shouldReceive('generateTestingResponse')->once()->once((array) $request->getModel())->andReturn($params);
+        $api->shouldReceive('parseResponse')->once()->andReturn($params);
 
-        try {
-            $action->execute($request);
-        } catch (HttpResponse $response) {
-            $this->assertSame($endpoint, $response->getUrl());
-            $this->assertSame($details->toUnsafeArray(), $response->getFields());
-        }
-
-        $request->shouldHaveReceived('getModel')->twice();
-        $api->shouldHaveReceived('isSandbox')->once();
-        $api->shouldHaveReceived('generateTestingResponse')->with($details->toUnsafeArray())->once();
-        $api->shouldHaveReceived('parsePaymentResult')->with($details->toUnsafeArray())->once();
+        $action->execute($request);
+        $this->assertSame($params, (array) $request->getModel());
     }
 }

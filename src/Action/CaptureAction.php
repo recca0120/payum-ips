@@ -33,10 +33,7 @@ class CaptureAction extends BaseApiAwareAction implements ActionInterface, Gatew
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->request['paymentResult']) === true) {
-            $params = array_merge(
-                $httpRequest->request,
-                $this->api->parsePaymentResult($httpRequest->request['paymentResult'])
-            );
+            $params = $this->api->parseResponse($httpRequest->request);
             if ($this->api->verifyHash($params) === false) {
                 $result['RspCode'] = '-1';
             }

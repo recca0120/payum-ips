@@ -21,8 +21,11 @@ class CreateTransactionAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($this->api->isSandbox() === true) {
-            $paymentResult = $this->api->generateTestingResponse((array) $details);
-            $details->replace($this->api->parsePaymentResult($paymentResult));
+            $details->replace(
+                $this->api->parseResponse(
+                    $this->api->generateTestingResponse((array) $details)
+                )
+            );
 
             return;
         }

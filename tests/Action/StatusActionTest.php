@@ -1,17 +1,20 @@
 <?php
 
+namespace PayumTW\Ips\Tests\Action;
+
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use PayumTW\Ips\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 
-class StatusActionTest extends PHPUnit_Framework_TestCase
+class StatusActionTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
     }
 
-    public function test_request_mark_new()
+    public function testRequestMarkNew()
     {
         $this->validate([
             'Version' => 'v1.0.0',
@@ -36,7 +39,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         ], 'markNew');
     }
 
-    public function test_request_mark_captured()
+    public function testRequestMarkCaptured()
     {
         $this->validate([
             'Version' => 'v1.0.0',
@@ -82,7 +85,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         ], 'markCaptured');
     }
 
-    public function test_request_mark_failed()
+    public function testRequestMarkFailed()
     {
         $this->validate([
             'Version' => 'v1.0.0',

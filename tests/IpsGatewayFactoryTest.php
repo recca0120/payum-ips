@@ -1,53 +1,36 @@
 <?php
 
+namespace PayumTW\Ips\Tests;
+
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use PayumTW\Ips\IpsGatewayFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 
-class IpsGatewayFactoryTest extends PHPUnit_Framework_TestCase
+class IpsGatewayFactoryTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
     }
 
-    public function test_create_factory()
+    public function testCreateConfig()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $httpClient = m::mock('Payum\Core\HttpClientInterface');
-        $message = m::mock('Http\Message\MessageFactory');
-
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
         $gateway = new IpsGatewayFactory();
         $config = $gateway->createConfig([
             'payum.api' => false,
             'payum.required_options' => [],
-            'payum.http_client' => $httpClient,
-            'httplug.message_factory' => $message,
-            'MerCode' => md5(rand()),
-            'MerKey' => md5(rand()),
-            'Account' => md5(rand()),
+            'payum.http_client' => $httpClient = m::mock('Payum\Core\HttpClientInterface'),
+            'httplug.message_factory' => $messageFactory = m::mock('Http\Message\MessageFactory'),
+            'MerCode' => 'foo',
+            'MerKey' => 'foo',
+            'Account' => 'foo',
             'sandbox' => true,
         ]);
 
-        $api = call_user_func($config['payum.api'], ArrayObject::ensureArrayObject($config));
-
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
-
-        $this->assertInstanceOf('PayumTW\Ips\Api', $api);
+        $this->assertInstanceOf(
+            'PayumTW\Ips\Api',
+            $config['payum.api'](ArrayObject::ensureArrayObject($config))
+        );
     }
 }
