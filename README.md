@@ -8,6 +8,8 @@
 [![License](https://poser.pugx.org/payum-tw/ips/license.svg)](https://packagist.org/packages/payum-tw/ips)
 [![Monthly Downloads](https://poser.pugx.org/payum-tw/ips/d/monthly)](https://packagist.org/packages/payum-tw/ips)
 [![Daily Downloads](https://poser.pugx.org/payum-tw/ips/d/daily)](https://packagist.org/packages/payum-tw/ips)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/recca0120/payum-ips/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/recca0120/payum-ips/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/recca0120/payum-ips/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/recca0120/payum-ips/?branch=master)
 
 The Payum extension to rapidly build new extensions.
 

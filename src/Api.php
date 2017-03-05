@@ -53,9 +53,9 @@ class Api
     ];
 
     /**
-     * @param array               $options
+     * @param array $options
      * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
+     * @param MessageFactory $messageFactory
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
