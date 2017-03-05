@@ -88,8 +88,6 @@ class Api
      * createTransaction.
      *
      * @param array $params
-     * @param mixed $request
-     *
      * @return array
      */
     public function createTransaction(array $params)
@@ -149,19 +147,17 @@ class Api
      * getTransactionData.
      *
      * @param mixed $params
-     *
      * @return array
      */
     public function getTransactionData(array $params)
     {
-        // to do soap
+        return [];
     }
 
     /**
      * Verify if the hash of the given parameter is correct.
      *
      * @param array $params
-     *
      * @return bool
      */
     public function verifyHash(array $params)
@@ -172,11 +168,8 @@ class Api
     /**
      * parseResponse.
      *
-     * @method parseResponse
-     *
      * @param string $response
-     *
-     * @return array
+     * @return string
      */
     public function parseResponse($response)
     {
@@ -195,10 +188,7 @@ class Api
     /**
      * generatGetwayRequest.
      *
-     * @method generatGetwayRequest
-     *
      * @param array $params
-     *
      * @return string
      */
     protected function generatGetwayRequest($params)
@@ -216,10 +206,7 @@ class Api
     /**
      * convertToXML.
      *
-     * @method convertToXML
-     *
      * @param array $params
-     *
      * @return string
      */
     protected function convertToXML($params)
@@ -239,10 +226,7 @@ class Api
     /**
      * split.
      *
-     * @method split
-     *
      * @param array $params
-     *
      * @return array
      */
     protected function split($params)
@@ -264,10 +248,7 @@ class Api
     /**
      * addCdata.
      *
-     * @method addCdata
-     *
      * @param array $params
-     *
      * @return array
      */
     protected function addCdata($params)
@@ -282,8 +263,9 @@ class Api
     }
 
     /**
-     * @param array $params
+     * calculateHash.
      *
+     * @param array $params
      * @return string
      */
     protected function calculateHash(array $params)
@@ -301,10 +283,7 @@ class Api
     /**
      * parseResultTags.
      *
-     * @method parseResultTags
-     *
      * @param string $paymentResult
-     *
      * @return array
      */
     protected function parseResultTags($paymentResult)
@@ -320,8 +299,6 @@ class Api
     /**
      * isSandbox.
      *
-     * @method isSandbox
-     *
      * @return bool
      */
     public function isSandbox()
@@ -332,10 +309,7 @@ class Api
     /**
      * generateTestingResponse.
      *
-     * @method generateTestingResponse
-     *
      * @param array $params
-     *
      * @return array
      */
     public function generateTestingResponse($params = [])
