@@ -186,6 +186,53 @@ class Api
     }
 
     /**
+     * isSandbox.
+     *
+     * @return bool
+     */
+    public function isSandbox()
+    {
+        return $this->options['sandbox'];
+    }
+
+    /**
+     * generateTestingResponse.
+     *
+     * @param array $params
+     * @return array
+     */
+    public function generateTestingResponse($params = [])
+    {
+        $supportedParams = [
+            'ReferenceID' => '',
+            'RspCode' => '000000',
+            'RspMsg' => '交易成功！',
+            'ReqDate' => date('YmdHis'),
+            'RspDate' => date('YmdHis'),
+            'CurrencyType' => 156,
+            'Amount' => null,
+            'Date' => date('Ymd'),
+            'Status' => 'Y',
+            'Msg' => '支付成功！',
+            'IpsBillNo' => date('YmdHis'),
+            'IpsTradeNo' => date('YmdHis'),
+            'RetEncodeType' => 17,
+            'BankBillNo' => '710002875951',
+            'ResultType' => 0,
+            'IpsBillTime' => date('YmdHis'),
+        ];
+
+        $params = array_filter(array_replace(
+            $supportedParams,
+            array_intersect_key($params, $supportedParams)
+        ));
+
+        return [
+            'paymentResult' => $this->generatGetwayRequest($params),
+        ];
+    }
+
+    /**
      * generatGetwayRequest.
      *
      * @param array $params
@@ -294,52 +341,5 @@ class Api
         }
 
         return $result;
-    }
-
-    /**
-     * isSandbox.
-     *
-     * @return bool
-     */
-    public function isSandbox()
-    {
-        return $this->options['sandbox'];
-    }
-
-    /**
-     * generateTestingResponse.
-     *
-     * @param array $params
-     * @return array
-     */
-    public function generateTestingResponse($params = [])
-    {
-        $supportedParams = [
-            'ReferenceID' => '',
-            'RspCode' => '000000',
-            'RspMsg' => '交易成功！',
-            'ReqDate' => date('YmdHis'),
-            'RspDate' => date('YmdHis'),
-            'CurrencyType' => 156,
-            'Amount' => null,
-            'Date' => date('Ymd'),
-            'Status' => 'Y',
-            'Msg' => '支付成功！',
-            'IpsBillNo' => date('YmdHis'),
-            'IpsTradeNo' => date('YmdHis'),
-            'RetEncodeType' => 17,
-            'BankBillNo' => '710002875951',
-            'ResultType' => 0,
-            'IpsBillTime' => date('YmdHis'),
-        ];
-
-        $params = array_filter(array_replace(
-            $supportedParams,
-            array_intersect_key($params, $supportedParams)
-        ));
-
-        return [
-            'paymentResult' => $this->generatGetwayRequest($params),
-        ];
     }
 }
